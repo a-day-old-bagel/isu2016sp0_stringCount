@@ -1,0 +1,6 @@
+
+# clion ide files
+/.idea
+
+# likely build dirs
+/build

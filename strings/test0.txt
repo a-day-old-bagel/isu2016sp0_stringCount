@@ -1,0 +1,1 @@
+Test string 0 is an input test case for Senior Project assignment 0.
