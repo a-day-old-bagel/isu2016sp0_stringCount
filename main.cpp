@@ -20,6 +20,16 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
  * IN THE SOFTWARE.
  */
+/**
+ * This program takes a string either from a file or from the command line directly.
+ * It counts the total characters and words appearing in the input and also counts
+ * the frequency of each. This information is printed to the console.
+ *
+ * USAGE:
+ * 'StringCount [FILENAME]'
+ * OR
+ * 'StringCount -s [STRING]'
+ */
 
 #include <iostream>
 #include "StringAnalyzer.h"
@@ -57,7 +67,7 @@ int main(int argc, char ** argv) {
 }
 
 std::string queryFileName() {
-    printf("Select a file to read (defualt %s): ", defuaultStrFile.c_str());
+    printf("Select a file to read (try %s): ", defuaultStrFile.c_str());
     std::string input;
     std::cin >> input;
     return input;
