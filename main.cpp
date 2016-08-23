@@ -25,34 +25,34 @@
 #include "StringAnalyzer.h"
 using namespace isu2016sp0;
 
-static const std::string defuaultStrFile = "strings/test0.txt";
+static const std::string defuaultStrFile = "strings/lorem.txt";
 std::string queryFileName();
 
 int main(int argc, char ** argv) {
     StringAnalyzer analyzer;
-    ReturnValue status = SUCCESS;
+    ReturnValue status;
     if (argc > 1) {
         status = analyzer.setString(argc, argv);
     } else {
         status = analyzer.setString(queryFileName().c_str());
         while (status == FILE_NOT_FOUND) {
-            std::cout << "File not found or unreadable!\n";
+            std::cerr << "File not found or unreadable!\n";
             status = analyzer.setString(queryFileName().c_str());
         }
     }
     switch (status) {
         case SUCCESS:
-            std::cout << analyzer.getString() << std::endl;
             break;
-        case FILE_NOT_FOUND:    // This will only be reached in case of command line arguments
-            std::cout << "File not found or unreadable: " << argv[1] << std::endl;
-            return status;
-        case BAD_ARGUMENTS:
-            std::cout << "Bad arguments. Usage: 'StringCount [FILENAME]' OR 'StringCount -s [STRING]'\n";
+        case FILE_NOT_FOUND:
+            std::cerr << "File not found or unreadable: " << argv[1] << std::endl;
+        case BAD_ARGUMENTS: // cascades
+            std::cerr << "Usage: 'StringCount [FILENAME]' OR 'StringCount -s [STRING]'\n";
             return status;
         default:
             return status;
     }
+    analyzer.analyze();
+    std::cout << analyzer.printResults();
     return 0;
 }
 

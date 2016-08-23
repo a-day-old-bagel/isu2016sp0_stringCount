@@ -23,16 +23,25 @@
 #ifndef STRINGCOUNT_STRINGANALYZER_H
 #define STRINGCOUNT_STRINGANALYZER_H
 #include <string>
+#include <unordered_map>
+#include <map>
 namespace isu2016sp0 {
     enum ReturnValue {
         SUCCESS = 0, FILE_NOT_FOUND, BAD_ARGUMENTS
     };
     class StringAnalyzer {
         std::string string;
+        uint64_t wordCount = 0, charCount = 0;
+        std::map<std::string, uint64_t> wordFreq;
+        std::unordered_map<char, uint64_t> charFreq;
+        void tallyWords();
+        void tallyChars();
     public:
         ReturnValue setString(const char* strFilePath);
         ReturnValue setString(int argc, char ** argv);
         std::string getString();
+        void analyze();
+        std::string printResults();
     };
 }
 #endif //STRINGCOUNT_STRINGANALYZER_H

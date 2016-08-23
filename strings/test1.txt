@@ -1,0 +1,5 @@
+This is some text with newlines.
+It also has "punktuation" so that we can de-punk it
+(remove all "punktuation")
+So hopefully... ...,. this doesn't mess it up...
+IT'S great!

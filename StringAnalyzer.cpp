@@ -23,6 +23,9 @@
 #include <fstream>
 #include <sstream>
 #include <cstring>
+#include <vector>
+#include <iomanip>
+#include <algorithm>
 #include "StringAnalyzer.h"
 namespace isu2016sp0 {
     ReturnValue StringAnalyzer::setString(const char* strFilePath) {
@@ -55,5 +58,62 @@ namespace isu2016sp0 {
     }
     std::string StringAnalyzer::getString() {
         return string;
+    }
+    static int isWordChar(int chr) {
+        return ( (std::ispunct(chr) && chr != '\'' && chr != '-' && chr != '_') || ! std::isprint(chr) );
+    }
+    static void splitByDelim(const std::string& str, char delim, std::vector<std::string>& out) {
+        std::stringstream stream(str);
+        std::string subStr;
+        while (std::getline(stream, subStr, delim)) {
+            if (subStr.length()) {
+                std::string stripped;
+                std::remove_copy_if(
+                        subStr.begin(), subStr.end(),
+                        std::back_inserter(stripped),
+                        std::ptr_fun<int, int>(&isWordChar));
+                if (stripped.length()) {
+                    out.push_back(stripped);
+                }
+            }
+        }
+    }
+    void StringAnalyzer::tallyWords() {
+        std::vector<std::string> lines;
+        splitByDelim(string, '\n', lines);
+        for (auto line : lines) {
+            std::vector<std::string> words;
+            splitByDelim(line, ' ', words);
+            wordCount += words.size();
+            for (uint64_t i = 0; i < words.size(); ++i) {
+                wordFreq[words[i]]++;
+            }
+        }
+    }
+    void StringAnalyzer::tallyChars() {
+        charCount = string.size();
+        for (uint64_t i = 0; i < charCount; ++i) {
+            charFreq[string[i]]++;
+        }
+    }
+    void StringAnalyzer::analyze() {
+        tallyChars();
+        tallyWords();
+    }
+    std::string StringAnalyzer::printResults() {
+        std::stringstream out;
+        out << "Character count: " << charCount << std::endl;
+        out << "Word count: " << wordCount << std::endl;
+        out << "Character Frequencies (alphabetically):" << std::endl;
+        for (char c = ' '; c <= '~'; ++c) { // only checks visible characters + space
+            if (charFreq.count(c)) {
+                out << "'" << c << "': " << charFreq.at(c) << std::endl;
+            }
+        }
+        out << "Word Frequencies (alphabetically):" << std::endl;
+        for (auto pair : wordFreq) {
+            out << "\"" << pair.first << "\": " << pair.second << std::endl;
+        }
+        return out.str();
     }
 }
